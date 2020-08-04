@@ -1,7 +1,7 @@
 .logo {
     -fx-font-family: "Roboto Condensed";
     -fx-font-weight: bold;
-    -fx-font-size: 36px;
+    -fx-font-size: 37px;
     -fx-text-fill: #fca000;
     -fx-padding: -4 0 0 0;
     -fx-effect: innershadow(one-pass-box, #713e00, 2, 0, -1, -1);
@@ -10,8 +10,9 @@
 .sub-logo {
     -fx-font-family: "Roboto";
     -fx-font-size: 13px;
+    -fx-font-weight: bold;
     -fx-text-fill: #00b32a;
-    -fx-padding: -8 0 0 2;
+    -fx-padding: -6 0 0 1;
     -fx-text-alignment: left;
 }
 
@@ -19,6 +20,34 @@
     -fx-font-family: "Roboto Mono";
     -fx-font-size: 11px;
     -fx-text-fill: #828282;
-    -fx-padding: -8 2 0 0;
+    -fx-padding: -6 0 0 0;
     -fx-alignment: center-right;
+}
+
+.dash-tabs .tab {
+    -fx-font-family: "Roboto";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-focus-color: transparent;
+    -fx-text-alignment: center;
+    -fx-padding: 10;
+    -fx-faint-focus-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+
+
+    /*
+    -fx-background-color: #ff0000;
+    */
+}
+.dash-tabs .tab-label {
+    -fx-text-fill: #909090;
+}
+
+.dash-tabs .tab:selected .tab-label {
+    -fx-text-fill: #242424;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: -3 0 10 0;
 }
