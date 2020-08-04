@@ -4,7 +4,7 @@
     -fx-font-size: 37px;
     -fx-text-fill: #fca000;
     -fx-padding: -4 0 0 0;
-    -fx-effect: innershadow(one-pass-box, #713e00, 2, 0, -1, -1);
+    -fx-effect: innershadow(one-pass-box, #713e00, 1, 0, -1, -1);
 }
 
 .sub-logo {
@@ -12,7 +12,7 @@
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #00b32a;
-    -fx-padding: -6 0 0 1;
+    -fx-padding: -9 0 0 1;
     -fx-text-alignment: left;
 }
 
@@ -22,6 +22,10 @@
     -fx-text-fill: #828282;
     -fx-padding: -6 0 0 0;
     -fx-alignment: center-right;
+}
+
+.dash-tabs {
+    -fx-padding: 0 0 -1 0;
 }
 
 .dash-tabs .tab {
@@ -34,12 +38,8 @@
     -fx-faint-focus-color: transparent;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
-
-
-    /*
-    -fx-background-color: #ff0000;
-    */
 }
+
 .dash-tabs .tab-label {
     -fx-text-fill: #909090;
 }
@@ -48,6 +48,27 @@
     -fx-text-fill: #242424;
 }
 
-.tab-pane .tab-header-area {
+.dash-tabs .tab-header-area {
     -fx-padding: -3 0 10 0;
 }
+
+.status-bar {
+    -fx-border-color: #b5b5b5;
+    -fx-border-style: solid none none none;
+    -fx-background-color: #e7e7e7;
+    -fx-border-width: 1px;
+}
+
+.corner-status {
+    -fx-border-color: #b5b5b5;
+    -fx-border-style: solid solid none none;
+    -fx-background-color: #dddddd;
+}
+
+.rates {
+    -fx-font-family: "Roboto Mono";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-alignment: left;
+}
+
