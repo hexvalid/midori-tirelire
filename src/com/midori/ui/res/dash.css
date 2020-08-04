@@ -1,0 +1,24 @@
+.logo {
+    -fx-font-family: "Roboto Condensed";
+    -fx-font-weight: bold;
+    -fx-font-size: 36px;
+    -fx-text-fill: #fca000;
+    -fx-padding: -4 0 0 0;
+    -fx-effect: innershadow(one-pass-box, #713e00, 2, 0, -1, -1);
+}
+
+.sub-logo {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 13px;
+    -fx-text-fill: #00b32a;
+    -fx-padding: -8 0 0 2;
+    -fx-text-alignment: left;
+}
+
+.version {
+    -fx-font-family: "Roboto Mono";
+    -fx-font-size: 11px;
+    -fx-text-fill: #828282;
+    -fx-padding: -8 2 0 0;
+    -fx-alignment: center-right;
+}
