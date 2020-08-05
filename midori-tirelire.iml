@@ -10,5 +10,6 @@
     <orderEntry type="library" name="httpclient" level="project" />
     <orderEntry type="library" name="httpcore" level="project" />
     <orderEntry type="library" name="commons-logging" level="project" />
+    <orderEntry type="library" name="json" level="project" />
   </component>
 </module>

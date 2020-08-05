@@ -58,7 +58,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" styleClass="status-bar" HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="_btc_rate" styleClass="rates" text="1 BTC:  " />
+                  <Label fx:id="_btc_rate" styleClass="rates" text="" />
                </children></HBox>
          </children>
       </HBox>

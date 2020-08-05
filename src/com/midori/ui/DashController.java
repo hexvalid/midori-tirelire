@@ -15,7 +15,6 @@ public class DashController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        _btc_rate.setText("Hello");
 
     }
 }

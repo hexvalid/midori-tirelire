@@ -1,3 +1,47 @@
+@font-face {
+    font-family: "fontello";
+    src: url("fonts/fontello.ttf");
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto-Italic";
+    font-weight: italic;
+    src: url("fonts/Roboto-Italic.ttf");
+}
+
+@font-face {
+    font-family: "Roboto-Bold";
+    font-weight: bold;
+    src: url("fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+    font-family: "RobotoCondensed";
+    src: url("fonts/RobotoCondensed-Regular.ttf");
+}
+
+@font-face {
+    font-family: "RobotoCondensed-Bold";
+    font-weight: bold;
+    src: url("fonts/RobotoCondensed-Bold.ttf");
+}
+
+@font-face {
+    font-family: "RobotoMono";
+    src: url("fonts/RobotoMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "RobotoMono-Bold";
+    font-weight: bold;
+    src: url("fonts/RobotoMono-Bold.ttf");
+}
+
 .logo {
     -fx-font-family: "Roboto Condensed";
     -fx-font-weight: bold;
@@ -9,7 +53,7 @@
 
 .sub-logo {
     -fx-font-family: "Roboto";
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #00b32a;
     -fx-padding: -9 0 0 1;
@@ -17,7 +61,7 @@
 }
 
 .version {
-    -fx-font-family: "Roboto Mono";
+    -fx-font-family: "RobotoMono";
     -fx-font-size: 11px;
     -fx-text-fill: #828282;
     -fx-padding: -6 0 0 0;
@@ -66,9 +110,8 @@
 }
 
 .rates {
-    -fx-font-family: "Roboto Mono";
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
+    -fx-font-family: "fontello";
+    -fx-text-fill: #5a5a5a;
+    -fx-font-size: 16px;
     -fx-text-alignment: left;
 }
-

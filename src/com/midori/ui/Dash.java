@@ -15,6 +15,7 @@ public class Dash extends Application {
         scene.getStylesheets().add(Dash.class.getResource("res/dash.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
+
         primaryStage.show();
     }
 }
