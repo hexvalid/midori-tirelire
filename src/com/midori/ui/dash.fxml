@@ -2,14 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.midori.ui.DashController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.midori.ui.DashController">
     <children>
         <ToolBar prefHeight="60.0">
             <items>
@@ -20,7 +24,8 @@
                               <Label alignment="CENTER_RIGHT" styleClass="logo" text="midori">
                            <VBox.margin>
                               <Insets />
-                           </VBox.margin></Label>
+                           </VBox.margin>
+                        </Label>
                         <HBox>
                            <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="sub-logo" text="tirelire" HBox.hgrow="ALWAYS" />
@@ -35,32 +40,43 @@
                   <Separator orientation="VERTICAL" />
                </children>
             </HBox>
-            <VBox prefHeight="48.0" prefWidth="235.0" />
             </items>
             <VBox.margin>
                 <Insets />
             </VBox.margin>
         </ToolBar>
-      <TabPane side="LEFT" styleClass="dash-tabs" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+      <TabPane prefHeight="520.0" prefWidth="480.0" side="LEFT" styleClass="dash-tabs" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="200.0" tabMaxWidth="200.0" VBox.vgrow="NEVER">
         <tabs>
-          <Tab text="DASHBOARD" />
+          <Tab text="DASHBOARD">
+               <content>
+                  <VBox spacing="10.0" styleClass="content">
+                     <children>
+                        <TitledPane animated="false" collapsible="false" prefHeight="170.0" text="Overview" VBox.vgrow="NEVER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="11.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
           <Tab text="ADD ACCOUNT" />
+            <Tab text="TORMDR">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="content">
+                     <children>
+                        <TableView fx:id="_relayList">
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="IP" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
             <Tab text="OPTIONS" />
-            <Tab text="LOGS" />
         </tabs>
       </TabPane>
-      <HBox prefHeight="30.0">
-         <children>
-            <HBox alignment="CENTER" prefWidth="44.0" styleClass="corner-status">
-               <children>
-                  <Label text=".stat" textFill="#949494" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" styleClass="status-bar" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label fx:id="_btc_rate" styleClass="rates" text="" />
-               </children></HBox>
-         </children>
-      </HBox>
+      <ListView fx:id="_logView" prefHeight="195.0" styleClass="log-view" VBox.vgrow="NEVER" />
+      <HBox alignment="CENTER_LEFT" prefHeight="25.0" styleClass="status-bar" />
     </children>
 </VBox>

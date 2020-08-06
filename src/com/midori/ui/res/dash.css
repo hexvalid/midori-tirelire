@@ -42,6 +42,11 @@
     src: url("fonts/RobotoMono-Bold.ttf");
 }
 
+.root {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 12;
+}
+
 .logo {
     -fx-font-family: "Roboto Condensed";
     -fx-font-weight: bold;
@@ -61,7 +66,7 @@
 }
 
 .version {
-    -fx-font-family: "RobotoMono";
+    -fx-font-family: "Roboto Mono";
     -fx-font-size: 11px;
     -fx-text-fill: #828282;
     -fx-padding: -6 0 0 0;
@@ -97,15 +102,12 @@
 }
 
 .status-bar {
-    -fx-border-color: #b5b5b5;
-    -fx-border-style: solid none none none;
-    -fx-background-color: #e7e7e7;
-    -fx-border-width: 1px;
+    -fx-background-color: #dddddd;
 }
 
 .corner-status {
     -fx-border-color: #b5b5b5;
-    -fx-border-style: solid solid none none;
+    -fx-border-width: 1 1 0 0;
     -fx-background-color: #dddddd;
 }
 
@@ -115,3 +117,47 @@
     -fx-font-size: 16px;
     -fx-text-alignment: left;
 }
+
+.log-view {
+    -fx-border-color: #b5b5b5;
+    -fx-border-width: 1 0 1 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.content {
+    -fx-padding: 10 10 11 10;
+    -fx-spacing: 10;
+}
+
+
+/*Remove hover glow on TableViews*/
+.table-view:focused {
+    -fx-background-color: transparent, -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 1, 0, 1;
+    -fx-background-radius: 1, 0, 0;
+    -fx-padding: 1;
+}
+
+
+/*Remove hover glow on TitledPanes*/
+.titled-pane > .title:hover > .button {
+    -fx-color: -fx-base;
+}
+
+.titled-pane > .title:hover > .button:hover {
+    -fx-color: -fx-hover-base;
+}
+
+.titled-pane > .title:hover > .button:armed {
+    -fx-color: -fx-pressed-base;
+}
+
+/*
+.log-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background-color: #dddddd;
+}
+
+.log-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled {
+    -fx-background-color: #dddddd;
+}*/
