@@ -1,6 +1,10 @@
 package com.midori.utils;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -10,10 +14,12 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.security.cert.X509Certificate;
 
 public class HttpTools {
@@ -65,5 +71,20 @@ public class HttpTools {
         return RequestConfig.custom().setSocketTimeout(timeout)
                 .setConnectTimeout(timeout).setConnectionRequestTimeout(timeout)
                 .setContentCompressionEnabled(false).build();
+    }
+
+    public static String executeMiniRequest(HttpRequestBase req) throws IOException {
+        CloseableHttpResponse res = HttpTools.miniHttpClient.execute(req);
+        int statusCode = res.getStatusLine().getStatusCode();
+        if (!(statusCode >= 200 && statusCode < 300)) {
+            throw new ClientProtocolException("Unexpected response status: " + statusCode);
+        }
+        HttpEntity entity = res.getEntity();
+        if (entity == null) {
+            throw new ClientProtocolException("Null entity");
+        }
+        String body = EntityUtils.toString(entity);
+        res.close();
+        return body;
     }
 }

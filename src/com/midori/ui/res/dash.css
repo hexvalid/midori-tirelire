@@ -58,10 +58,10 @@
 
 .sub-logo {
     -fx-font-family: "Roboto";
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #00b32a;
-    -fx-padding: -9 0 0 1;
+    -fx-text-fill: #15a136;
+    -fx-padding: -7 0 0 1;
     -fx-text-alignment: left;
 }
 
@@ -69,7 +69,7 @@
     -fx-font-family: "Roboto Mono";
     -fx-font-size: 11px;
     -fx-text-fill: #828282;
-    -fx-padding: -6 0 0 0;
+    -fx-padding: -7 0 0 0;
     -fx-alignment: center-right;
 }
 
@@ -105,16 +105,29 @@
     -fx-background-color: #dddddd;
 }
 
-.corner-status {
-    -fx-border-color: #b5b5b5;
-    -fx-border-width: 1 1 0 0;
-    -fx-background-color: #dddddd;
+.status-bar-separator {
+    -fx-padding: 1 3 1 5;
+}
+
+
+.rates-icon1 {
+    -fx-font-family: "fontello";
+    -fx-text-fill: #ea9300;
+    -fx-font-size: 16px;
+    -fx-padding: -2 4 0 0;
+}
+
+.rates-icon2 {
+    -fx-font-family: "fontello";
+    -fx-text-fill: #15a136;
+    -fx-font-size: 15px;
+    -fx-padding: -2 4 0 0;
 }
 
 .rates {
-    -fx-font-family: "fontello";
+    -fx-font-family: "Roboto Mono";
     -fx-text-fill: #5a5a5a;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-text-alignment: left;
 }
 

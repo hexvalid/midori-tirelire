@@ -11,6 +11,8 @@ public class TorMDR {
     private String binaryPath;
     private String dataDirectory;
 
+    private int no;
+
     private int socksPort;
     private int controlPort;
 
@@ -24,6 +26,22 @@ public class TorMDR {
     private String obfs4ProxyPath;
     private List<String> obfs4Bridges;
 
+
+    private Process process;
+    private InputStream inputStream;
+    private InputStreamReader inputStreamReader;
+    private BufferedReader bufferedReader;
+
+
+    public TorMDR(int no, String binaryPath, String dataDirectory) {
+        this.no = no;
+        this.socksPort = socksPortStart + no;
+        this.controlPort = controlPortStart + no;
+        this.binaryPath = binaryPath;
+        this.dataDirectory = dataDirectory;
+
+
+    }
 
     public static void main(String[] args) throws Exception {
         List<String> launchParams = new ArrayList<>(defaultArgs);
