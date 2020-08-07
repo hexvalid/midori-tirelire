@@ -13,6 +13,7 @@ public class Dash extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Log.PRINT_UI = true;
         System.setProperty("prism.allowhidpi", "false");
         setUserAgentStylesheet(STYLESHEET_MODENA);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dash.fxml"));
@@ -33,4 +34,5 @@ public class Dash extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
+
 }

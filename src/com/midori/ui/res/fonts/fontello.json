@@ -155,6 +155,12 @@
       "css": "rocket",
       "code": 61749,
       "src": "fontawesome"
+    },
+    {
+      "uid": "12f4ece88e46abd864e40b35e05b11cd",
+      "css": "ok",
+      "code": 59403,
+      "src": "fontawesome"
     }
   ]
 }

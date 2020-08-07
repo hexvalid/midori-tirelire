@@ -166,6 +166,11 @@
     -fx-color: -fx-pressed-base;
 }
 
+
+.relay-table-center {
+    -fx-alignment: center;
+}
+
 /*
 .log-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
     -fx-background-color: #dddddd;
