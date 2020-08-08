@@ -12,9 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.TextFlow;
+import org.apache.http.client.methods.HttpGet;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ResourceBundle;
 
 public class DashController implements Initializable {
@@ -48,6 +51,9 @@ public class DashController implements Initializable {
     private TableColumn<Relay, String> _relayList_S;
 
     @FXML
+    private TableColumn<Relay, String> _relayList_V;
+
+    @FXML
     private TableColumn<Relay, String> _relayList_Comment;
 
     @FXML
@@ -56,21 +62,43 @@ public class DashController implements Initializable {
     @FXML
     private Label _btc_rate;
 
+    private TorMDR tormdr;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         Log.Print(Log.t.INF, "Initiliaze started");
+        _relayList_CT.setCellValueFactory(new PropertyValueFactory<>("countryCode"));
         _relayList_IP.setCellValueFactory(new PropertyValueFactory<>("IP"));
         _relayList_BW.setCellValueFactory(new PropertyValueFactory<>("bandwidth"));
+        _relayList_V.setCellValueFactory(new PropertyValueFactory<>("valid"));
+        _relayList_Ping.setCellValueFactory(new PropertyValueFactory<>("ping"));
         _relayList_F.setCellValueFactory(new PropertyValueFactory<>("fast"));
         _relayList_S.setCellValueFactory(new PropertyValueFactory<>("stable"));
 
 
         MenuItem mi1 = new MenuItem("Measure Ping");
         mi1.setOnAction((ActionEvent event) -> {
-            Object item = _relayList.getSelectionModel().getSelectedItem();
-            System.out.println("Selected item: " + item);
+            new Thread(() -> {
+                Relay item = _relayList.getSelectionModel().getSelectedItem();
 
+
+                try {
+                    tormdr.SetRelay(item.getIP());
+                    item.checkValid(tormdr);
+                    Platform.runLater(() -> _relayList.refresh());
+
+                    item.checkCountryCode(tormdr);
+                    Platform.runLater(() -> _relayList.refresh());
+
+                    item.checkPing(tormdr);
+                    Platform.runLater(() -> _relayList.refresh());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }).start();
         });
 
 
@@ -95,12 +123,11 @@ public class DashController implements Initializable {
                 config.socks5ProxyUserName = "e4cf6e290c0cf8ae8fb91fcf818e1e40";
                 config.socks5ProxyPassword = "a565ab1f3802afbf4d07c1674069d813";*/
 
-                TorMDR tormdr = new TorMDR(1, config);
+                tormdr = new TorMDR(1, config);
                 tormdr.Start();
                 final ObservableList<Relay> data = FXCollections.observableArrayList(Relay.parseRelayList());
                 _relayList.setItems(data);
 
-                tormdr.Stop();
                 Platform.runLater(() -> _relayStartDiagnosticButton.setDisable(false));
 
             } catch (IOException e) {

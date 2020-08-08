@@ -32,7 +32,7 @@ public class HttpTools {
             .disableDefaultUserAgent()
             .disableContentCompression()
             .disableAutomaticRetries()
-            .setDefaultRequestConfig(miniRequestManager(15 * 1000))
+            .setDefaultRequestConfig(MiniRequestManager(15 * 1000))
             .setConnectionManager(miniConnManager(1, 2))
             .build();
 
@@ -67,7 +67,7 @@ public class HttpTools {
         return connectionManager;
     }
 
-    private static RequestConfig miniRequestManager(int timeout) {
+    public static RequestConfig MiniRequestManager(int timeout) {
         return RequestConfig.custom().setSocketTimeout(timeout)
                 .setConnectTimeout(timeout).setConnectionRequestTimeout(timeout)
                 .setContentCompressionEnabled(false).build();

@@ -1,6 +1,7 @@
 package com.midori.tormdr;
 
 import com.midori.ui.Log;
+import com.midori.utils.HttpTools;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -8,14 +9,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
@@ -159,6 +154,7 @@ public class TorMDR {
                 .disableDefaultUserAgent()
                 .disableContentCompression()
                 .disableAutomaticRetries()
+                .setDefaultRequestConfig(HttpTools.MiniRequestManager(10 * 1000))
                 .setConnectionManager(SocksFactory.CreateConnectionManager())
                 .build();
         CloseableHttpResponse res = client.execute(req, getContext());
