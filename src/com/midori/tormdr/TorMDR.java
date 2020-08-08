@@ -2,8 +2,24 @@ package com.midori.tormdr;
 
 import com.midori.ui.Log;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -12,22 +28,17 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class TorMDR {
     private final int no;
-    private int socksPort;
-    private int controlPort;
-    private ProcessBuilder processBuilder;
+    private final int socksPort;
+    private final int controlPort;
+    private final ProcessBuilder processBuilder;
     private Process process;
-    private InputStream inputStream;
-    private InputStreamReader inputStreamReader;
-    private BufferedReader bufferedReader;
-    private String bootStatus;
-
+    private HttpClientContext context;
 
     public TorMDR(int no, Config config) throws IOException {
-        Log.Print(Log.t.INF, String.format("TorMDR(%d): Initializing...", no));
+        Log.Print(Log.t.INF, String.format("TorMDR(%d): v%s Initializing...", no, javaLibVersion));
         if (!new File(config.binaryPath).isFile()) {
             throw new NoSuchFileException(config.binaryPath);
         }
@@ -70,14 +81,15 @@ public class TorMDR {
         }
 
         this.processBuilder = new ProcessBuilder(params);
+        this.context = HttpClientContext.create();
     }
 
     public void Start() throws IOException {
         this.process = this.processBuilder.start();
-        this.inputStream = process.getInputStream();
-        this.inputStreamReader = new InputStreamReader(this.inputStream);
-        this.bufferedReader = new BufferedReader(this.inputStreamReader);
-        String versionLine = this.bufferedReader.readLine();
+        InputStream inputStream = process.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String versionLine = bufferedReader.readLine();
         if (!versionLine.contains("TorMDR=")) {
             throw new IOException("TorMDR is responded unexpectedly");
         }
@@ -90,11 +102,11 @@ public class TorMDR {
                 versionParts[4].split("=")[0], versionParts[4].split("=")[1]));
 
         String line;
-        while ((line = this.bufferedReader.readLine()) != null) {
+        while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("Bootstrapped")) {
-                this.bootStatus = StringUtils.substringBetween(line, "(", ")");
-                Log.Print(Log.t.DBG, String.format("TorMDR(%d): Boot: %s", this.no, this.bootStatus));
-                if (this.bootStatus.equals("done")) {
+                String bootStatus = StringUtils.substringBetween(line, "(", ")");
+                Log.Print(Log.t.DBG, String.format("TorMDR(%d): Boot: %s", this.no, bootStatus));
+                if (bootStatus.equals("done")) {
                     break;
                 }
             } else if (line.contains("[warn]")) {
@@ -104,26 +116,90 @@ public class TorMDR {
                 Log.Print(Log.t.ERR, String.format("TorMDR(%d): %s", this.no, line.split("\\[err\\]")[1].trim()));
             }
         }
+        this.context.setAttribute("socks.address", new InetSocketAddress(TorMDR.localhost, this.socksPort));
+    }
+
+
+    public void NewCircuit() throws IOException, InterruptedException {
+        Log.Print(Log.t.DBG, String.format("TorMDR(%d): Building new circuit...", this.no));
+        Control control = new Control(this.controlPort);
+        control.SendMessage(Control.MSG_AUTHENTICATE);
+        control.SendMessage(Control.MSG_NEWNYM);
+        control.Close();
+    }
+
+    public void SetRelay(String relayIP) throws IOException {
+        Log.Print(Log.t.DBG, String.format("TorMDR(%d): Setting relay: %s...", this.no, relayIP));
+        Control control = new Control(this.controlPort);
+        control.SendMessage(Control.MSG_AUTHENTICATE);
+        control.SendMessage(Control.MSG_SETEXITNODES + relayIP);
+        control.Close();
+    }
+
+
+    public void Stop() throws IOException {
+        Log.Print(Log.t.DBG, String.format("TorMDR(%d): Stopping...", this.no));
+        Control control = new Control(this.controlPort);
+        control.SendMessage(Control.MSG_AUTHENTICATE);
+        control.SendMessage(Control.MSG_SHUTDOWN);
+        control.Close();
+        this.process.destroy();
+    }
+
+    public HttpClientContext getContext() {
+        return this.context;
+    }
+
+    public String ExecuteRequest(HttpRequestBase req) throws IOException {
+        CloseableHttpClient client = HttpClients.custom()
+                .disableAuthCaching()
+                .disableConnectionState()
+                .disableRedirectHandling()
+                .disableCookieManagement()
+                .disableDefaultUserAgent()
+                .disableContentCompression()
+                .disableAutomaticRetries()
+                .setConnectionManager(SocksFactory.CreateConnectionManager())
+                .build();
+        CloseableHttpResponse res = client.execute(req, getContext());
+        HttpEntity entity = res.getEntity();
+        if (!(res.getStatusLine().getStatusCode() >= 200 &&
+                res.getStatusLine().getStatusCode() < 300) || entity == null) {
+            throw new ClientProtocolException("Wrong entity. Status: " + res.getStatusLine().getStatusCode());
+        }
+        String body = EntityUtils.toString(entity);
+        res.close();
+        client.close();
+        return body;
     }
 
     public static void main(String[] args) throws Exception {
         Log.PRINT_CONSOLE = true;
 
 
-
-
-
-/*        Config config = new Config();
+        Config config = new Config();
         config.dataDirectory = "/tmp/tormdr";
         config.binaryPath = "/usr/bin/tormdr";
         TorMDR tormdr = new TorMDR(1, config);
-        tormdr.Start();*/
+        tormdr.Start();
 
+        System.out.println(tormdr.ExecuteRequest(new HttpGet("http://checkip.amazonaws.com/")));
+
+        tormdr.NewCircuit();
+        System.out.println(tormdr.ExecuteRequest(new HttpGet("http://checkip.amazonaws.com/")));
+        tormdr.NewCircuit();
+        System.out.println(tormdr.ExecuteRequest(new HttpGet("http://checkip.amazonaws.com/")));
+        tormdr.NewCircuit();
+        System.out.println(tormdr.ExecuteRequest(new HttpGet("http://checkip.amazonaws.com/")));
+        tormdr.NewCircuit();
+        System.out.println(tormdr.ExecuteRequest(new HttpGet("http://checkip.amazonaws.com/")));
+
+        tormdr.Stop();
 
     }
 
-    final private static String javaLibVersion = "0.1-portOfGo=1.0S";
-    final private static String localhost = "127.0.0.1";
+    final protected static String localhost = "127.0.0.1";
+    final private static String javaLibVersion = "1.0-portOfGo=1.0S";
     final private static String permMode = "rwx------";
 
     final private static int socksPortStart = 20000;

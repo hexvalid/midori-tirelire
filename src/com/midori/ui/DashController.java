@@ -6,6 +6,7 @@ import com.midori.tormdr.TorMDR;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -47,13 +48,10 @@ public class DashController implements Initializable {
     private TableColumn<Relay, String> _relayList_S;
 
     @FXML
-    private TableColumn<Relay, String> _relayList_V;
-
-    @FXML
     private TableColumn<Relay, String> _relayList_Comment;
 
     @FXML
-    public ListView<TextFlow> _logView;
+    protected ListView<TextFlow> _logView;
 
     @FXML
     private Label _btc_rate;
@@ -66,8 +64,19 @@ public class DashController implements Initializable {
         _relayList_BW.setCellValueFactory(new PropertyValueFactory<>("bandwidth"));
         _relayList_F.setCellValueFactory(new PropertyValueFactory<>("fast"));
         _relayList_S.setCellValueFactory(new PropertyValueFactory<>("stable"));
-        _relayList_V.setCellValueFactory(new PropertyValueFactory<>("valid"));
 
+
+        MenuItem mi1 = new MenuItem("Measure Ping");
+        mi1.setOnAction((ActionEvent event) -> {
+            Object item = _relayList.getSelectionModel().getSelectedItem();
+            System.out.println("Selected item: " + item);
+
+        });
+
+
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().add(mi1);
+        _relayList.setContextMenu(menu);
 
     }
 
@@ -78,20 +87,21 @@ public class DashController implements Initializable {
             Platform.runLater(() -> _relayStartDiagnosticButton.setDisable(true));
 
             try {
-               /* Config config = new Config();
+                Config config = new Config();
                 config.dataDirectory = "/tmp/tormdr";
                 config.binaryPath = "/usr/bin/tormdr";
-                config.useSocks5Proxy = true;
+/*                config.useSocks5Proxy = true;
                 config.socks5ProxyAddress = "40.70.243.118:32416";
                 config.socks5ProxyUserName = "e4cf6e290c0cf8ae8fb91fcf818e1e40";
-                config.socks5ProxyPassword = "a565ab1f3802afbf4d07c1674069d813";
-
+                config.socks5ProxyPassword = "a565ab1f3802afbf4d07c1674069d813";*/
 
                 TorMDR tormdr = new TorMDR(1, config);
-                tormdr.Start();*/
+                tormdr.Start();
                 final ObservableList<Relay> data = FXCollections.observableArrayList(Relay.parseRelayList());
                 _relayList.setItems(data);
 
+                tormdr.Stop();
+                Platform.runLater(() -> _relayStartDiagnosticButton.setDisable(false));
 
             } catch (IOException e) {
                 e.printStackTrace();

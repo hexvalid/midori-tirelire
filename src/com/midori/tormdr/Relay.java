@@ -11,33 +11,27 @@ import java.util.Scanner;
 
 public class Relay {
 
-    private SimpleStringProperty IP;
-    private SimpleIntegerProperty bandwidth;
-    private SimpleStringProperty fast;
-    private SimpleStringProperty stable;
-    private SimpleStringProperty valid;
+    final private SimpleStringProperty IP;
+    final private SimpleIntegerProperty bandwidth;
+    final private SimpleStringProperty fast;
+    final private SimpleStringProperty stable;
     private SimpleIntegerProperty ping;
     private SimpleIntegerProperty comment;
     private SimpleIntegerProperty countryCode;
 
 
-    private Relay(String ip, int bandwidth, boolean fast, boolean stable, boolean valid) {
+    private Relay(String ip, int bandwidth, boolean fast, boolean stable) {
         this.IP = new SimpleStringProperty(ip);
         this.bandwidth = new SimpleIntegerProperty(bandwidth);
         if (fast) {
-            this.fast = new SimpleStringProperty("\uE80B");
+            this.fast = new SimpleStringProperty("⚫");
         } else {
             this.fast = new SimpleStringProperty();
         }
         if (stable) {
-            this.stable = new SimpleStringProperty("\uE80B");
+            this.stable = new SimpleStringProperty("⚫");
         } else {
             this.stable = new SimpleStringProperty();
-        }
-        if (valid) {
-            this.valid = new SimpleStringProperty("\uE80B");
-        } else {
-            this.valid   = new SimpleStringProperty();
         }
     }
 
@@ -57,10 +51,6 @@ public class Relay {
         return this.stable.get();
     }
 
-    public String getValid() {
-        return this.valid.get();
-    }
-
     public static List<Relay> parseRelayList() throws IOException {
         List<Relay> relayList = new ArrayList<>();
         Scanner scanner = new Scanner(new File("/tmp/tormdr/1/cache/cached-microdesc-consensus"));
@@ -77,10 +67,10 @@ public class Relay {
                 }
                 scanner.nextLine();
                 scanner.nextLine();
-                if (lineS.contains("Exit") && lineS.contains("Running") && !lineS.contains("BadExit")) {
+                if (lineS.contains("Exit") && lineS.contains("Running") && lineS.contains("Valid")
+                        && !lineS.contains("BadExit")) {
                     boolean fast = lineS.contains("Fast");
                     boolean stable = lineS.contains("Stable");
-                    boolean valid = lineS.contains("Valid");
                     String lineW = scanner.nextLine();
                     if (!(lineW.charAt(0) == 'w' && lineW.charAt(1) == ' ' && lineW.charAt(2) == 'B')) {
                         throw new IOException("unexcepted W line");
@@ -91,7 +81,7 @@ public class Relay {
                     } else {
                         bandwidth = Integer.parseInt(lineW.split("=")[1]);
                     }
-                    relayList.add(new Relay(ip, bandwidth, fast, stable, valid));
+                    relayList.add(new Relay(ip, bandwidth, fast, stable));
                 } else {
                     scanner.nextLine();
                 }

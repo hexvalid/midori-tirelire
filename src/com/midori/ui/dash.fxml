@@ -74,14 +74,13 @@
                         </HBox>
                         <TableView fx:id="_relayList" VBox.vgrow="ALWAYS">
                            <columns>
-                              <TableColumn fx:id="_relayList_IP" prefWidth="105.0" resizable="false" text="IP" />
                               <TableColumn fx:id="_relayList_CT" prefWidth="30.0" resizable="false" styleClass="relay-table-center" text="CT" />
+                              <TableColumn fx:id="_relayList_IP" prefWidth="105.0" resizable="false" text="IP" />
                               <TableColumn fx:id="_relayList_BW" prefWidth="50.0" resizable="false" text="BW" />
                               <TableColumn fx:id="_relayList_Ping" prefWidth="45.0" resizable="false" text="Ping" />
+                              <TableColumn fx:id="_relayList_Comment" prefWidth="125.0" text="Comment" />
                               <TableColumn fx:id="_relayList_F" prefWidth="24.0" resizable="false" styleClass="relay-table-center" text="F" />
                               <TableColumn fx:id="_relayList_S" prefWidth="24.0" resizable="false" styleClass="relay-table-center" text="S" />
-                              <TableColumn fx:id="_relayList_V" prefWidth="24.0" resizable="false" styleClass="relay-table-center" text="V" />
-                              <TableColumn fx:id="_relayList_Comment" prefWidth="101.0" text="Comment" />
                            </columns>
                         </TableView>
                      </children>
